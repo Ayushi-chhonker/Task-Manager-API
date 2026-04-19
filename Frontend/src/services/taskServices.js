@@ -1,6 +1,6 @@
-import axios from "axios";
+import API from "./api";
 
-const API_URL = "http://localhost:5000/api/tasks";
+// const API_URL = "http://localhost:5000/api/tasks";
 
 const getToken = () => {
   return localStorage.getItem("token");
