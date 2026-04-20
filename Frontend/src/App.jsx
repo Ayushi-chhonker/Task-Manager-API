@@ -18,7 +18,7 @@ function App() {
 
 }, []);
 
-  const API = "http://localhost:5000/api";
+  const API = "https://task-manager-api-j99f.onrender.com/api";
 
      // Register states
   const [name, setName] = useState("");
