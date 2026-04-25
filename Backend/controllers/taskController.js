@@ -1,12 +1,13 @@
 const taskService = require("../services/taskService");
 
+
 // function to create task
 exports.createTask = async (req, res) => {
 
   try {
-     
+
     console.log("User ID:", req.user);
-   console.log("Task Body:", req.body);
+    console.log("Task Body:", req.body);
 
     const { title } = req.body;
 
@@ -18,10 +19,11 @@ exports.createTask = async (req, res) => {
       });
 
     }
-// adding user id to task
+
+    // adding user id to task
     const task =
       await taskService.createTask({
-        ...req.body,
+        title,
         user: req.user
       });
 
@@ -31,15 +33,16 @@ exports.createTask = async (req, res) => {
 
   catch (error) {
 
-  console.log("Create Task Error:", error);
+    console.log("Create Task Error:", error);
 
-  res.status(500).json({
-    message: error.message
-  });
+    res.status(500).json({
+      message: error.message
+    });
 
-}
+  }
 
 };
+
 
 // function to Get Tasks
 exports.getTasks = async (req, res) => {
@@ -53,44 +56,63 @@ exports.getTasks = async (req, res) => {
 
     res.json(tasks);
 
-  } catch (error) {
+  }
+
+  catch (error) {
+
+    console.log("Get Tasks Error:", error);
 
     res.status(500).json({
       message: "Error fetching tasks"
     });
 
   }
+
 };
+
 
 // function to Delete Task
 exports.deleteTask = async (req, res) => {
 
   try {
 
+    const taskId =
+      req.params.id;
+
     await taskService.deleteTask(
-      req.params.id
+      taskId
     );
 
     res.json({
       message: "Task deleted"
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
+
+    console.log("Delete Error:", error);
 
     res.status(500).json({
       message: "Error deleting task"
     });
 
   }
+
 };
+
+
 // function to Update Task
 exports.updateTask = async (req, res) => {
 
   try {
 
+    const taskId =
+      req.params.id;
+
     const updatedTask =
       await taskService.updateTask(
-        req.params.id,
+        taskId,
         req.body
       );
 
@@ -100,6 +122,8 @@ exports.updateTask = async (req, res) => {
 
   catch (error) {
 
+    console.log("Update Error:", error);
+
     res.status(500).json({
       message: "Error updating task"
     });
@@ -107,13 +131,16 @@ exports.updateTask = async (req, res) => {
   }
 
 };
-//function to Search Tasks
+
+
+// function to Search Tasks
 exports.searchTasks = async (req, res) => {
 
   try {
 
     // Get keyword from query
-    const keyword = req.query.keyword;
+    const keyword =
+      req.query.keyword || "";
 
     // Call service
     const tasks =
@@ -122,7 +149,6 @@ exports.searchTasks = async (req, res) => {
         keyword
       );
 
-    // Send response
     res.json(tasks);
 
   }
@@ -133,6 +159,50 @@ exports.searchTasks = async (req, res) => {
 
     res.status(500).json({
       message: "Error searching tasks"
+    });
+
+  }
+
+};
+
+
+// function to Update Task Status Only
+exports.updateTaskStatus = async (req, res) => {
+
+  try {
+
+    const taskId =
+      req.params.id;
+
+    const { status } =
+      req.body;
+
+    // check if status is sent
+    if (!status) {
+
+      return res.status(400).json({
+        message: "Status is required"
+      });
+
+    }
+
+    // call service
+    const updatedTask =
+      await taskService.updateTaskStatus(
+        taskId,
+        status
+      );
+
+    res.json(updatedTask);
+
+  }
+
+  catch (error) {
+
+    console.log("Update Status Error:", error);
+
+    res.status(500).json({
+      message: "Error in updating task status"
     });
 
   }

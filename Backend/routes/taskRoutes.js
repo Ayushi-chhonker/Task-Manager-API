@@ -8,7 +8,8 @@ const {
   createTask,
   updateTask,
   deleteTask,
-  searchTasks
+  searchTasks,
+   updateTaskStatus 
 } = require("../controllers/taskController");
 
 // middleware for authentication
@@ -25,6 +26,9 @@ router.post("/", authMiddleware, createTask);
 
 // route to Update task
 router.put("/:id", authMiddleware, updateTask);
+
+//route to update task status only
+router.put("/:id/status", authMiddleware, updateTaskStatus);
 
 //route to Delete task
 router.delete("/:id", authMiddleware, deleteTask);

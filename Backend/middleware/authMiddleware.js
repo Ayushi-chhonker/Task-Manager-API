@@ -5,30 +5,53 @@ const authMiddleware = (req, res, next) => {
 
   try {
 
-    // Get token from header
-    const authHeader = req.header("Authorization");
+    // Get Authorization header
+    const authHeader =
+      req.header("Authorization");
 
+    // Step 2: Check if header exists
     if (!authHeader) {
+
       return res.status(401).json({
         message: "No token, authorization denied"
       });
+
     }
 
-    // Remove "Bearer " from token
-    const token = authHeader.split(" ")[1];
+    //Extract token safely
+    // Bearer token_here
+    const token =
+      authHeader.split(" ")[1];
 
-    // Verify token using secret key
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    // Check if token exists
+    if (!token) {
 
-    // Attach user id
-    req.user = decoded.id;
+      return res.status(401).json({
+        message: "Token missing"
+      });
 
+    }
+
+    //Verify token using secret key
+    const decoded =
+      jwt.verify(
+        token,
+        process.env.JWT_SECRET
+      );
+
+   // Attach user id to request
+    req.user =
+      decoded.id;
     next();
 
-  } catch (error) {
+  }
+
+  catch (error) {
+
+    console.log(
+      "Token Error:",
+      error.message
+    );
 
     res.status(401).json({
       message: "Token is not valid"
@@ -37,5 +60,6 @@ const authMiddleware = (req, res, next) => {
   }
 
 };
-//exporting middleware
+
+// exporting middleware
 module.exports = authMiddleware;

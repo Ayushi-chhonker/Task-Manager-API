@@ -54,3 +54,25 @@ exports.searchTasks = async (userId, keyword) => {
   });
 
 };
+// function to update only task status
+
+exports.updateTaskStatus = async (taskId, status) => {
+
+  // Find task and update status
+  const updatedTask =
+    await Task.findByIdAndUpdate(
+      taskId,
+      { status: status }, // update only status
+      { new: true }
+    );
+
+  // Check if task exists
+  if (!updatedTask) {
+
+    throw new Error("Task not found");
+
+  }
+
+  return updatedTask;
+
+};

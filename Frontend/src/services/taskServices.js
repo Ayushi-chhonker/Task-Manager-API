@@ -82,3 +82,58 @@ export const updateTask = async (id, data) => {
 
   }
 };
+// Search tasks
+export const searchTaskService = async (keyword) => {
+
+  try {
+
+    const response =
+      await API.get(
+        `/tasks/search?keyword=${keyword}`
+      );
+
+    return response.data;
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Search Task Error:",
+      error
+    );
+
+    throw error.response?.data || error.message;
+
+  }
+
+};
+
+
+// Update task status
+export const updateTaskStatusService = async (id, statusData) => {
+
+  try {
+
+    const response =
+      await API.put(
+        `/tasks/${id}/status`,
+        statusData
+      );
+
+    return response.data;
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Update Status Error:",
+      error
+    );
+
+    throw error.response?.data || error.message;
+
+  }
+
+};
