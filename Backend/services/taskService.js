@@ -1,78 +1,102 @@
 const Task = require("../models/task");
 
-// function to create new task
-exports.createTask = async (taskData) => {
+// create new task
+exports.createTask = async (data) => {
 
-  return await Task.create(taskData);
+  const task =
+    await Task.create(data);
+
+  return task;
 
 };
 
-// function to get all tasks of logged in user
+
+// get all tasks of user
 exports.getTasks = async (userId) => {
 
-  return await Task.find({
-    user: userId
-  });
+  const tasks =
+    await Task.find({
+      user: userId
+    });
+
+  return tasks;
 
 };
 
-// function to get single task by id
-exports.getTaskById = async (taskId) => {
 
-  return await Task.findById(taskId);
+// get single task
+exports.getTaskById = async (id) => {
 
-};
+  const task =
+    await Task.findById(id);
 
-// function to update task
-exports.updateTask = async (taskId, updatedData) => {
-
-  return await Task.findByIdAndUpdate(
-    taskId,
-    updatedData,
-    { new: true }
-  );
+  return task;
 
 };
 
-// function to Delete Task
-exports.deleteTask = async (taskId) => {
 
-  return await Task.findByIdAndDelete(
-    taskId
-  );
+// update task
+exports.updateTask = async (id, data) => {
 
-};
-
-// function to Search Tasks
-exports.searchTasks = async (userId, keyword) => {
-
-  return await Task.find({
-    user: userId,
-    
-    // using regex to match search text
-    title: { $regex: keyword, $options: "i" }
-  });
-
-};
-// function to update only task status
-
-exports.updateTaskStatus = async (taskId, status) => {
-
-  // Find task and update status
-  const updatedTask =
+  const task =
     await Task.findByIdAndUpdate(
-      taskId,
-      { status: status }, // update only status
+      id,
+      data,
       { new: true }
     );
 
-  // Check if task exists
-  if (!updatedTask) {
+  return task;
 
-    throw new Error("Task not found");
+};
+
+
+// delete task
+exports.deleteTask = async (id) => {
+
+  await Task.findByIdAndDelete(id);
+
+};
+
+
+// search task
+exports.searchTasks = async (userId, keyword) => {
+
+  const tasks =
+    await Task.find({
+      user: userId,
+
+      // search title text
+      title: {
+        $regex: keyword,
+        $options: "i"
+      }
+
+    });
+
+  return tasks;
+
+};
+
+
+// update only completed status
+exports.updateTaskStatus = async (id, status) => {
+
+  const task =
+    await Task.findByIdAndUpdate(
+      id,
+
+      // IMPORTANT FIX: use completed not status
+      { completed: status },
+
+      { new: true }
+    );
+
+  if (!task) {
+
+    throw new Error("task not found");
 
   }
 
-  return updatedTask;
+  return task;
 
 };

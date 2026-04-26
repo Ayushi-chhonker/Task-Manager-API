@@ -29,6 +29,8 @@ function App() {
   const [token, setToken] = useState("");
 
   const [editId, setEditId] = useState(null);
+  //loading state
+  const [loading, setLoading] = useState(false);
 
   // Load saved token
   useEffect(() => {
@@ -78,6 +80,8 @@ const login = async () => {
 
   try {
 
+    setLoading(true); // start loading
+
     const data =
       await loginUser({
         email: loginEmail,
@@ -106,13 +110,20 @@ const login = async () => {
 
   }
 
-};
+  finally {
 
+    setLoading(false); // stop loading
+
+  }
+
+};
 
 // Load Tasks
 const loadTasks = async () => {
 
   try {
+
+    setLoading(true);
 
     const data =
       await getTasks();
@@ -123,15 +134,19 @@ const loadTasks = async () => {
 
   catch (error) {
 
-    console.log(error);
+    console.error(error);
+
+  }
+
+  finally {
+
+    setLoading(false);
 
   }
 
 };
-
-
 // Create / Update Task
-const createTask = async () => {
+const handleCreateTask = async () => {
 
   try {
 
@@ -172,7 +187,7 @@ const createTask = async () => {
 
   catch (error) {
 
-    console.log(error);
+    console.error(error);
 
   }
 
@@ -180,7 +195,7 @@ const createTask = async () => {
 
 
 // Delete Task
-const deleteTask = async (id) => {
+const handleDeleteTask = async (id) => {
 
   try {
 
@@ -194,7 +209,7 @@ const deleteTask = async (id) => {
 
   catch (error) {
 
-    console.log(error);
+    console.error(error);
 
   }
 
@@ -215,14 +230,11 @@ const toggleComplete = async (task) => {
 
   try {
 
-    const newStatus =
-      task.status === "completed"
-        ? "pending"
-        : "completed";
-
-    await updateTaskStatusService(
+    await updateTaskService(
       task._id,
-      { status: newStatus }
+      {
+        completed: !task.completed
+      }
     );
 
     await loadTasks();
@@ -231,7 +243,7 @@ const toggleComplete = async (task) => {
 
   catch (error) {
 
-    console.log(error);
+    console.error(error);
 
   }
 
@@ -239,7 +251,7 @@ const toggleComplete = async (task) => {
 
 
 // Search Tasks
-const searchTasks = async (keyword) => {
+const handleSearchTasks = async (keyword) => {
 
   try {
 
@@ -261,7 +273,7 @@ const searchTasks = async (keyword) => {
 
   catch (error) {
 
-    console.log(error);
+    console.error(error);
 
   }
 
@@ -286,6 +298,7 @@ const logout = () => {
 <div className="container">
 
 <h1>Manage your daily task efficiently</h1>
+{loading && <p>Loading...</p>}
 
 <button onClick={logout}>
 Logout
@@ -349,7 +362,7 @@ Login
 type="text"
 placeholder="Search tasks..."
 onChange={(e) =>
-searchTasks(e.target.value)}
+handleSearchTasks(e.target.value)}
 />
 
 <input
@@ -359,7 +372,7 @@ onChange={(e) =>
 setTitle(e.target.value)}
 />
 
-<button onClick={createTask}>
+<button onClick={handleCreateTask}>
 {editId ? "Update Task" : "Create Task"}
 </button>
 
@@ -377,7 +390,7 @@ tasks.map((task) => (
 <input
 type="checkbox"
 checked={
-task.status === "completed"
+  task.completed
 }
 onChange={() =>
 toggleComplete(task)}
@@ -394,7 +407,7 @@ Edit
 
 <button
 onClick={() =>
-deleteTask(task._id)}
+handleDeleteTask(task._id)}
 >
 Delete
 </button>

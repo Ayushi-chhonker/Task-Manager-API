@@ -20,7 +20,7 @@ export const getTasks = async () => {
 
 
 // Create task
-export const createTask = async (taskData) => {
+export const createTaskService = async (taskData) => {
   try {
 
     const response =
@@ -42,7 +42,7 @@ export const createTask = async (taskData) => {
 
 
 // Delete task
-export const deleteTask = async (id) => {
+export const deleteTaskService = async (id) => {
   try {
 
     const response =
@@ -63,7 +63,7 @@ export const deleteTask = async (id) => {
 
 
 // Update task
-export const updateTask = async (id, data) => {
+export const updateTaskService = async (id, data) => {
   try {
 
     const response =

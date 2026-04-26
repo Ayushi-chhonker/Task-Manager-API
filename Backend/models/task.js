@@ -12,7 +12,7 @@ const taskSchema = new mongoose.Schema(
     description: {
       type: String
     },
-     // to check whether task is completed or not
+     //check whether task is completed or not
     completed: {
       type: Boolean,
       default: false

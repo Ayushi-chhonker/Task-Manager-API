@@ -1,178 +1,96 @@
-# Task Manager Application
- Project Description
+ Task Manager Application
 
-This project is a Task Manager Application developed using Node.js, Express.js, MongoDB, and React.js.
+This is a simple Task Manager web application made using MERN stack.  
+In this project, users can register, login, and manage their daily tasks.
 
-It allows users to:
-- Register a new account
-- Login securely using JWT authentication
-- Create tasks
-- View tasks
-- Manage personal task data
+The main purpose of this project is to understand how frontend and backend communicate using APIs and how authentication works using JWT token.
 
-The backend provides REST APIs, and the frontend is built using React to interact with those APIs.
-
----
- Technologies Used
-
- Backend:
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- JSON Web Token (JWT)
-- dotenv
-
- Frontend:
-- React.js
-- Vite
-- Fetch API
-- CSS
-
- Tools:
-- Postman (API Testing)
-- GitHub (Version Control)
-
----
-
- Folder Structure
-
-project-folder/
-
-│  
-├── backend/  
-│   ├── controllers/  
-│   ├── models/  
-│   ├── routes/  
-│   ├── middleware/  
-│   ├── config/  
-│   ├── server.js  
-│   ├── package.json  
-│  
-├── frontend/  
-│   ├── src/  
-│   ├── public/  
-│   ├── index.html  
-│   ├── package.json  
-│  
-├── README.md  
-├── .gitignore  
-
----
 
  Features
 
- Authentication:
 - User Registration
-- User Login
-- JWT Token Authentication
+- User Login using JWT Authentication
+- Create new tasks
+- Update task title
+- Delete tasks
+- Mark task as completed using checkbox
+- Search tasks
+- Update task status
+- Token stored in localStorage
+- Loading message shown during API calls
 
- Task Management:
-- Create Task
-- View Tasks
-- Update Task
-- Delete Task
 
----
+# Technologies Used
 
- API Endpoints
+ Frontend
+- React.js
+- Axios
+- CSS
 
- Authentication Routes
+Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- bcryptjs
 
-POST /api/auth/register  
-Register new user
 
-POST /api/auth/login  
-Login user and generate token
+Folder Structure
 
----
 
-Task Routes
+ How to Run This Project
 
-GET /api/tasks  
-Get all tasks
+ Backend Setup
 
-POST /api/tasks  
-Create new task
+1 Go to backend folder
 
-PUT /api/tasks/:id  
-Update task
+2 Install dependencies
 
-DELETE /api/tasks/:id  
-Delete task
+3 Create `.env` file and add:
 
----
+4 Start backend server
 
- How to Run Backend
 
-1 Open backend folder:
+Frontend Setup
 
-cd backend
+1 Go to frontend folder
 
-2 Install dependencies:
+2 Install dependencies
 
-npm install
+3 Start frontend
 
-3 Create .env file and add:
 
-MONGO_URI=your_mongodb_connection_string  
-PORT=5000  
+ API Endpoints Used
 
-4 Run backend:
+Authentication
 
-npm run dev
+- POST '/api/auth/register' → Register user  
+- POST '/api/auth/login' → Login user  
 
-Backend will run on:
+ Tasks
 
-http://localhost:5000
+- GET '/api/tasks' → Get all tasks  
+- POST '/api/tasks' → Create task  
+- PUT '/api/tasks/:id' → Update task  
+- DELETE '/api/tasks/:id' → Delete task  
+- GET '/api/tasks/search' → Search tasks  
+- PUT '/api/tasks/:id/status' → Update task status  
 
----
 
- How to Run Frontend
+What I Learned From This Project
 
-1. Open frontend folder:
+- How JWT authentication works
+- How middleware protects routes
+- How to connect MongoDB with Node.js
+- How frontend sends requests using Axios
+- How CRUD operations work
+- How to handle errors in APIs
 
-cd frontend
-
-2. Install dependencies:
-
-npm install
-
-3. Run frontend:
-
-npm run dev
-
-Frontend will run on:
-
-http://localhost:5173
-
----
-
- Database Used
-
-MongoDB Atlas
-
-Collections:
-
-Users Collection:
-- name
-- email
-- password
-
-Tasks Collection:
-- title
-- description
-- user
-
----
-
- Testing
-
-All APIs were tested using Postman before integrating with frontend.
-
----
 
 Author
 
 Name: Ayushi  
-Project: Task Manager Application  
+Course: B.Tech  
+Project: Task Manager Application
+

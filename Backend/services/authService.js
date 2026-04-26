@@ -2,48 +2,63 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// =====================
-// REGISTER USER
-// =====================
+
+// register new user
 const registerUser = async (name, email, password) => {
-  // check if user already exists
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    throw new Error("User already exists");
+
+  // check if email already used
+  const userExist = await User.findOne({ email });
+
+  if (userExist) {
+    throw new Error("user already exists");
   }
 
-  // hash password
+  // hashing password
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
 
-  // create user
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
+  const hash = await bcrypt.hash(
+    password,
+    salt
+  );
+
+  // save user in database
+  const newUser = await User.create({
+    name: name,
+    email: email,
+    password: hash
   });
 
+  // send basic user data
   return {
-    _id: user._id,
-    name: user.name,
-    email: user.email,
+    _id: newUser._id,
+    name: newUser.name,
+    email: newUser.email
   };
+
 };
 
-// =====================
-// LOGIN USER
-// =====================
+
+
+// login existing user
 const loginUser = async (email, password) => {
-  // check user
-  const user = await User.findOne({ email });
+
+  // find user by email
+  const user = await User.findOne({
+    email: email
+  });
+
   if (!user) {
-    throw new Error("Invalid email or password");
+    throw new Error("invalid email or password");
   }
 
-  // compare password
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error("Invalid email or password");
+  // check password
+  const match = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!match) {
+    throw new Error("invalid email or password");
   }
 
   // create token
@@ -53,15 +68,19 @@ const loginUser = async (email, password) => {
     { expiresIn: "7d" }
   );
 
+  // send user info with token
   return {
     _id: user._id,
     name: user.name,
     email: user.email,
-    token,
+    token: token
   };
+
 };
 
+
+// export functions
 module.exports = {
   registerUser,
-  loginUser,
+  loginUser
 };
